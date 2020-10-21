@@ -1,0 +1,2 @@
+# easycodessm
+利用easycode插件整合ssm实现简单的crud
