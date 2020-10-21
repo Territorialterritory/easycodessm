@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+<!--    <context:property-placeholder location="db.properties"/>-->
+<!--    <context:property-placeholder location="classpath:db.properties" />-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="url" value="jdbc:mysql://localhost:3306/test_database?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=UTC"/>
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="username" value="deceiver"/>
+        <property name="password" value="deceiver"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="bean">
+        <property name="typeAliasesPackage" value="cn.deceiver.pojo"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:mapper/*Dao.xml"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.deceiver.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="bean"/>
+    </bean>
+
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="manager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <tx:advice transaction-manager="manager" id="interceptor">
+        <tx:attributes>
+            <tx:method name="select*" propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception"/>
+            <tx:method name="insert*" propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception"/>
+            <tx:method name="delete*" propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="pointcut" expression="execution(* cn.deceiver.service.*.*(..))"/>
+        <aop:advisor advice-ref="interceptor" pointcut-ref="pointcut"/>
+    </aop:config>
+
+</beans>
