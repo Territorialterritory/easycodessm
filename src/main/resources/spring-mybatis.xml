@@ -8,10 +8,10 @@
 <!--    <context:property-placeholder location="db.properties"/>-->
 <!--    <context:property-placeholder location="classpath:db.properties" />-->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
-        <property name="url" value="jdbc:mysql://localhost:3306/test_database?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=UTC"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/xxxxxx?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=UTC"/>
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="username" value="deceiver"/>
-        <property name="password" value="deceiver"/>
+        <property name="username" value="xxx"/>
+        <property name="password" value="xxx"/>
     </bean>
 
     <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="bean">
